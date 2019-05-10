@@ -1,51 +1,178 @@
 $( document ).ready(function() {
 
-	var ctx = document.getElementById("chart1").getContext('2d');
-	var myChart = new Chart.Line(ctx, {
-	    type: 'line',
-	    data: {
-	        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-	        datasets: [{
-	            label: '# of Votes',
-	            fill: false,
-	            data: [12, 19, 3, 5, 2, 3],
-	            borderColor: [
-	                'rgba(255,99,132,1)',
-	                'rgba(54, 162, 235, 1)',
-	                'rgba(255, 206, 86, 1)',
-	                'rgba(75, 192, 192, 1)',
-	                'rgba(153, 102, 255, 1)',
-	                'rgba(255, 159, 64, 1)'
-	            ],
-	            borderWidth: 1
-	        }]
-	    },
-	    options: {
-					responsive: true,
-					hoverMode: 'index',
-					stacked: false,
-					title: {
-						display: true,
-						text: 'Chart.js Line Chart - Multi Axis'
+	var timeFormat = 'MM/DD/YYYY HH:mm';
+	var color = Chart.helpers.color;
+	var labels={'name':['AcceleratiaX','AcceleratiaY','AcceleratiaZ','GyroscopeX','GyroscopeY','GyroscopeZ','MagnetometruX','MagnetometruY','MagnetometruZ','Temperatura'],
+				'color':["Red", "Blue", "Yellow", "Green", "Purple", "Orange","Black","Brown","Pink","#01D758"]};
+	var config = {
+			type: 'line',
+		    data:{
+					datasets:[ {
+							label: labels.name[0],
+							backgroundColor: labels.color[0],
+							borderColor: labels.color[0],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[1],
+							backgroundColor: labels.color[1],
+							borderColor: labels.color[1],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[2],
+							backgroundColor: labels.color[2],
+							borderColor: labels.color[2],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[3],
+							backgroundColor: labels.color[3],
+							borderColor: labels.color[3],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[4],
+							backgroundColor: labels.color[4],
+							borderColor: labels.color[4],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[5],
+							backgroundColor: labels.color[5],
+							borderColor: labels.color[5],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[6],
+							backgroundColor: labels.color[6],
+							borderColor: labels.color[6],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[7],
+							backgroundColor: labels.color[7],
+							borderColor: labels.color[7],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[8],
+							backgroundColor: labels.color[8],
+							borderColor: labels.color[8],
+							fill: false,
+							data: []
+						},{
+							label: labels.name[9],
+							backgroundColor: labels.color[9],
+							borderColor: labels.color[9],
+							fill: false,
+							data: []
+						}]
 					},
-					scales: {
-						yAxes: [{
-							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+			options: {
+				title: {
+					text: 'Chart.js Time Scale'
+				},
+				scales: {
+					xAxes: [{
+						type: 'time',
+						time: {
+							parser: timeFormat,
+							// round: 'day'
+							tooltipFormat: 'll HH:mm'
+						},
+						scaleLabel: {
 							display: true,
-							position: 'left',
-							id: 'y-axis-1',
-						}, {
-							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+							labelString: 'Date'
+						}
+					}],
+					yAxes: [{
+						scaleLabel: {
 							display: true,
-							position: 'right',
-							id: 'y-axis-2',
+							labelString: 'value'
+						}
+					}]
+				},
+			}
+	};
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myLine = new Chart(ctx, config);
+	
+	update_Values();
 
-							// grid line settings
-							gridLines: {
-								drawOnChartArea: false, // only want the grid lines for one axis to show up
-							},
-						}],
-					}
-				}
-	});
+	function update_Values(){
+		var limita = $("#limita")[0].value;
+		$.ajax({  
+           url:        'http://localhost:8000/Values',
+           type:       'POST',
+           data: 		{limit:limita},
+           dataType:   'json',
+           async:      true,
+           
+           success: function(data, status) { 
+           		console.log(data);
+           		//myChart.data.labels.push(new Date(1));
+
+           		for( var i=0;i<10;i++) {
+           			window.myLine.data.datasets[i].data=[];
+           			window.myLine.update();
+           		}
+           		for(var i = 0; i < data.length; i++) {
+           			
+       				window.myLine.data.datasets[0].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].acceleratiaX
+					});
+					window.myLine.data.datasets[1].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].acceleratiaY
+					});
+					window.myLine.data.datasets[2].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].acceleratiaZ
+					});
+					window.myLine.data.datasets[3].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].gyroscopeX
+					});
+					window.myLine.data.datasets[4].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].gyroscopeY
+					});
+					window.myLine.data.datasets[5].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].gyroscopeZ
+					});
+					window.myLine.data.datasets[6].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].magnetometruX
+					});
+					window.myLine.data.datasets[7].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].magnetometruY
+					});
+					window.myLine.data.datasets[8].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].magnetometruZ
+					});
+					window.myLine.data.datasets[9].data.push({
+						x:new Date (data[i].time.date),
+						y:data[i].temperatura
+					});
+					window.myLine.update();
+
+           		}
+           },   
+           error : function(xhr, textStatus, errorThrown) {
+              alert('Ajax request failed.');
+           }
+        });
+		var delay = $("#delay")[0].value;
+		if(delay<1)
+			delay=1;
+		delay*=1000;
+        setTimeout(function(){update_Values();},delay);
+        
+	}
+	
 });

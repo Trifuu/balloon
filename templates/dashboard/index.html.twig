@@ -3,16 +3,13 @@
 {% block title %}Dashboard {{ controller_name }}!{% endblock %}
 
 {% block body %}
-<div style="height:100%;width:100%;background-color:#f5f6fa;">
-	  <div class="row">
+<div style="height:100%;width:100%;text-align:center;">
+	Limita: <input id="limita" type="text" style="width:100px;" value="25"/>
+	Delay: <input id="delay" type="text" style="width:100px;" value="3"/>
+	  <div class="row" style="width:100%;">
 	    <div class="col-sm" style="padding:40px;">
-	      	<div style="height:100%;width:100;background-color:#dcdde1;">
-	      		<canvas id="chart1" style="width:400px;height:400px;max-width:100%;max-height:100%;"></canvas>
-	      	</div>
-	    </div>
-	    <div class="col-sm" style="padding:40px;">
-	    	<div style="height:100%;width:100;background-color:#dcdde1;">
-	      		<canvas id="chart2" style="width:400px;height:400px;max-width:100%;max-height:100%;"></canvas>
+	      	<div style="height:100%width:100%;">
+	      		<canvas id="canvas"></canvas>
 	      	</div>
 	    </div>
 	  </div>
@@ -21,5 +18,9 @@
 {% endblock %}
 
 {% block javascripts %}
+	<script src="/js/moment.min.js"></script>
+	<script src="/js/Chart.min.js"></script>
+	<script src="/js/utils.js"></script>
+	
 	<script src="/js/dashboard/dashboard.js"></script>
 {% endblock %}
